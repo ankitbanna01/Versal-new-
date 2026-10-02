@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { ArrowRight, Menu, X } from 'lucide-react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { NAV_LINKS } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { OyeLogo } from '@/components/OyeLogo'
@@ -10,114 +12,236 @@ import { OyeLogo } from '@/components/OyeLogo'
 export function Navbar({ activeHref }: { activeHref?: string }) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const pathname                = usePathname()
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    const fn = () => setScrolled(window.scrollY > 16)
+    window.addEventListener('scroll', fn, { passive: true })
+    return () => window.removeEventListener('scroll', fn)
   }, [])
 
-  return (
-    <header
-      className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        scrolled
-          ? 'bg-white/90 backdrop-blur-xl border-b border-[#DCEBFF] shadow-[0_2px_16px_0_#0066FF0D]'
-          : 'bg-white/70 backdrop-blur-md',
-      )}
-    >
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+  useEffect(() => { setOpen(false) }, [pathname])
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [open])
 
-          {/* ── Logo — links to homepage, exact uploaded asset ── */}
+  const currentPath = activeHref || pathname
+  const isActive = (href: string) => href === '/' ? currentPath === '/' : currentPath.startsWith(href)
+
+  return (
+    <>
+      {/* ══════════════════════════════════════
+          HEADER BAR
+      ══════════════════════════════════════ */}
+      <header
+        className={cn(
+          'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+          scrolled
+            ? 'bg-white/94 backdrop-blur-xl border-b border-[#DCEBFF] shadow-[0_2px_24px_0_#0066FF0C]'
+            : 'bg-white/82 backdrop-blur-md',
+        )}
+        style={{ height: 64 }}
+      >
+        {/*
+          Three-column layout:
+            [logo]   [nav — centered]   [cta]
+          Each outer column is equal width so nav truly centres.
+        */}
+        <div
+          className="h-full mx-auto grid items-center"
+          style={{
+            maxWidth: 1320,
+            paddingLeft:  'clamp(24px, 4vw, 56px)',
+            paddingRight: 'clamp(24px, 4vw, 56px)',
+            gridTemplateColumns: '1fr auto 1fr',
+            gap: 16,
+          }}
+        >
+          {/* ─── Logo (left) ─── */}
           <Link
             href="/"
-            className="shrink-0 flex items-center h-[64px] pr-4 overflow-hidden transition-opacity duration-200 hover:opacity-85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0066FF] rounded-md"
+            className="flex items-center gap-2 shrink-0 group"
             aria-label="OyeCreatives — go to homepage"
           >
             <OyeLogo className="h-[42px] sm:h-[46px] lg:h-[52px] w-auto max-w-[280px] object-contain" size={52} />
             <span className="ml-2 flex min-w-0 flex-col justify-center leading-none">
-              <span className="whitespace-nowrap text-[19px] font-extrabold text-[#102A56] sm:text-[20px]">
-                Oye<span className="text-[#0066FF]">Creatives</span>
-              </span>
-              <span className="mt-1 whitespace-nowrap text-[9px] font-medium text-[#64748B] sm:text-[10px]">
-                Creativity Without Limits
-              </span>
+              <span className="whitespace-nowrap text-[19px] font-extrabold text-[#102A56] sm:text-[20px]">Oye<span className="text-[#0066FF]">Creatives</span></span>
+              <span className="mt-1 whitespace-nowrap text-[9px] font-medium text-[#64748B] sm:text-[10px]">Creativity Without Limits</span>
             </span>
           </Link>
 
-          {/* Desktop nav */}
-          <nav className="hidden lg:flex items-center gap-0.5">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                aria-current={link.href === activeHref ? 'page' : undefined}
-                className={cn(
-                  'relative px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-md hover:bg-[#EAF4FF] group',
-                  link.href === activeHref ? 'text-[#0066FF]' : 'text-[#64748B] hover:text-[#0066FF]',
-                )}
-              >
-                {link.label}
-                <span className={cn(
-                  'absolute bottom-1 left-3 right-3 h-px bg-[#0066FF] transition-transform duration-200 origin-left',
-                  link.href === activeHref ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100',
-                )} />
-              </Link>
-            ))}
+          {/* ─── Desktop nav (center) ─── */}
+          <nav
+            className="hidden lg:flex items-center gap-0.5"
+            role="navigation"
+            aria-label="Main navigation"
+          >
+            {NAV_LINKS.map((link) => {
+              const active = isActive(link.href)
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  aria-current={active ? 'page' : undefined}
+                  className={cn(
+                    'relative px-3.5 py-2 text-[13px] font-semibold rounded-xl transition-all duration-200',
+                    active
+                      ? 'text-[#0066FF] bg-[#EAF4FF]'
+                      : 'text-[#64748B] hover:text-[#0066FF] hover:bg-[#F5FAFF]',
+                  )}
+                >
+                  {link.label}
+                  {active && (
+                    <motion.span
+                      layoutId="nav-active"
+                      className="absolute bottom-0.5 left-3.5 right-3.5 h-[2px] rounded-full bg-[#0066FF]"
+                      transition={{ type: 'spring', stiffness: 400, damping: 34 }}
+                    />
+                  )}
+                </Link>
+              )
+            })}
           </nav>
 
-          {/* CTA */}
-          <div className="hidden lg:flex items-center gap-3">
+          {/* ─── CTA (right) ─── */}
+          <div className="hidden lg:flex items-center justify-end">
             <Link
               href="/book-now"
-              className="group inline-flex items-center gap-2 rounded-lg btn-primary px-4 py-2 text-sm font-semibold text-white transition-transform duration-200 hover:scale-[1.03] hover:shadow-[0_8px_28px_0_#0066FF55]"
+              className="group inline-flex items-center gap-2 rounded-full btn-primary px-5 py-2.5 text-[13px] font-semibold text-white transition-all duration-200 hover:-translate-y-px hover:shadow-[0_8px_24px_0_#0066FF40] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0066FF] focus-visible:ring-offset-2"
             >
               Book Now
-              <ArrowRight size={14} className="transition-transform duration-200 group-hover:translate-x-1" />
+              <ArrowRight
+                size={14}
+                className="transition-transform duration-200 group-hover:translate-x-0.5"
+              />
             </Link>
           </div>
 
-          {/* Mobile hamburger — right side, never overlaps logo */}
-          <button
-            className="lg:hidden p-2 text-[#64748B] hover:text-[#0066FF] hover:bg-[#EAF4FF] rounded-lg transition-colors"
-            onClick={() => setOpen(!open)}
-            aria-label="Toggle menu"
-          >
-            {open ? <X size={20} /> : <Menu size={20} />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile menu */}
-      {open && (
-        <div className="lg:hidden bg-white border-t border-[#DCEBFF] shadow-[0_8px_24px_0_#0066FF0D]">
-          <nav className="mx-auto max-w-7xl px-6 py-4 flex flex-col gap-1">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                aria-current={link.href === activeHref ? 'page' : undefined}
-                className={cn(
-                  'px-3 py-2.5 text-sm font-medium hover:text-[#0066FF] hover:bg-[#EAF4FF] transition-colors rounded-md',
-                  link.href === activeHref ? 'text-[#0066FF] bg-[#EAF4FF]' : 'text-[#64748B]',
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
-            <Link
-              href="/book-now"
-              onClick={() => setOpen(false)}
-              className="group mt-3 inline-flex items-center justify-center gap-2 rounded-lg btn-primary px-4 py-2.5 text-sm font-semibold text-white"
+          {/* ─── Mobile: hamburger occupies right cell ─── */}
+          <div className="lg:hidden flex items-center justify-end">
+            <button
+              className="p-2 text-[#64748B] hover:text-[#0066FF] hover:bg-[#EAF4FF] rounded-xl transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0066FF]"
+              onClick={() => setOpen((v) => !v)}
+              aria-label={open ? 'Close menu' : 'Open menu'}
+              aria-expanded={open}
+              aria-controls="mobile-menu"
             >
-              Book Now
-              <ArrowRight size={14} className="transition-transform duration-200 group-hover:translate-x-1" />
-            </Link>
-          </nav>
+              <AnimatePresence mode="wait" initial={false}>
+                {open ? (
+                  <motion.div
+                    key="close"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.14 }}
+                  >
+                    <X size={20} />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="open"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                    transition={{ duration: 0.14 }}
+                  >
+                    <Menu size={20} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </button>
+          </div>
         </div>
-      )}
-    </header>
+      </header>
+
+      {/* ══════════════════════════════════════
+          MOBILE MENU
+      ══════════════════════════════════════ */}
+      <AnimatePresence>
+        {open && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              key="bd"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18 }}
+              className="fixed inset-0 z-40 bg-[#071A3D]/18 backdrop-blur-[2px] lg:hidden"
+              onClick={() => setOpen(false)}
+              aria-hidden="true"
+            />
+
+            {/* Panel */}
+            <motion.div
+              id="mobile-menu"
+              key="panel"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              className="fixed top-16 left-0 right-0 z-40 lg:hidden bg-white border-b border-[#DCEBFF] shadow-[0_16px_48px_0_#0066FF12]"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Navigation menu"
+            >
+              <nav
+                className="mx-auto flex flex-col py-2 pb-4"
+                style={{
+                  maxWidth: 1320,
+                  paddingLeft:  'clamp(24px, 5vw, 56px)',
+                  paddingRight: 'clamp(24px, 5vw, 56px)',
+                }}
+              >
+                {NAV_LINKS.map((link, i) => {
+                  const active = isActive(link.href)
+                  return (
+                    <motion.div
+                      key={link.href}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.04, duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      <Link
+                        href={link.href}
+                        onClick={() => setOpen(false)}
+                        aria-current={active ? 'page' : undefined}
+                        className={cn(
+                          'flex items-center justify-between px-3 py-3.5 rounded-xl text-[15px] font-semibold transition-all duration-150',
+                          active
+                            ? 'text-[#0066FF] bg-[#EAF4FF]'
+                            : 'text-[#102A56] hover:text-[#0066FF] hover:bg-[#F5FAFF]',
+                        )}
+                      >
+                        {link.label}
+                        {active && <span className="h-1.5 w-1.5 rounded-full bg-[#0066FF]" />}
+                      </Link>
+                    </motion.div>
+                  )
+                })}
+
+                {/* Mobile Book Now */}
+                <motion.div
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: NAV_LINKS.length * 0.04 + 0.04, duration: 0.18 }}
+                  className="mt-3 pt-3 border-t border-[#DCEBFF]"
+                >
+                  <Link
+                    href="/book-now"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center justify-center gap-2 w-full rounded-full btn-primary py-3.5 text-[14px] font-semibold text-white"
+                  >
+                    Book Now
+                    <ArrowRight size={14} />
+                  </Link>
+                </motion.div>
+              </nav>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   )
 }
