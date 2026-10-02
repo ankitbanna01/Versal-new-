@@ -28,7 +28,7 @@ export function Footer({ socialIcons = false }: { socialIcons?: boolean }) {
               className="flex h-16 items-center transition-opacity duration-200 hover:opacity-85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4D9CFF] rounded-md"
               aria-label="OyeCreatives — go to homepage"
             >
-              <OyeLogo className="h-full w-16 shrink-0" size={52} />
+              <OyeLogo className="h-full w-16 shrink-0" size={5} />
               <span className="ml-2 flex min-w-0 flex-col justify-center leading-none">
                 <span className="whitespace-nowrap text-[19px] font-extrabold text-white sm:text-[20px]">
                   Oye<span className="text-[#4D9CFF]">Creatives</span>

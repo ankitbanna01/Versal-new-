@@ -64,7 +64,7 @@ export function Navbar({ activeHref }: { activeHref?: string }) {
             className="flex items-center gap-2 shrink-0 group"
             aria-label="OyeCreatives — go to homepage"
           >
-            <OyeLogo className="h-[42px] sm:h-[46px] lg:h-[52px] w-auto max-w-[280px] object-contain" size={52} />
+            <OyeLogo className="h-[22px] sm:h-[33px] lg:h-[22px] w-auto max-w-[50px] object-contain" size={32} />
             <span className="ml-2 flex min-w-0 flex-col justify-center leading-none">
               <span className="whitespace-nowrap text-[19px] font-extrabold text-[#102A56] sm:text-[20px]">Oye<span className="text-[#0066FF]">Creatives</span></span>
               <span className="mt-1 whitespace-nowrap text-[9px] font-medium text-[#64748B] sm:text-[10px]">Creativity Without Limits</span>
