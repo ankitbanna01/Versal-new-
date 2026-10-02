@@ -11,14 +11,14 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Nova Studio — From Idea to Digital Growth',
+  title: 'OyeCreative — From Idea to Digital Growth',
   description:
     'Full-service creative and digital agency. Strategy, branding, web development, video production, and performance marketing — all under one roof.',
   generator: 'v0.app',
   icons: {
     icon: [
       { url: '/icon-light-32x32.png', media: '(prefers-color-scheme: light)' },
-      { url: '/icon-dark-32x32.png',  media: '(prefers-color-scheme: dark)'  },
+      { url: '/icon-dark-32x32.png', media: '(prefers-color-scheme: dark)' },
       { url: '/icon.svg', type: 'image/svg+xml' },
     ],
     apple: '/apple-icon.png',
@@ -37,7 +37,7 @@ export default function RootLayout({
     <html lang="en" className={inter.variable}>
       <body className="antialiased bg-background text-foreground font-sans">
         {children}
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        {process.env.NODE_ENV === 'production' && process.env.VERCEL === '1' && <Analytics />}
       </body>
     </html>
   )

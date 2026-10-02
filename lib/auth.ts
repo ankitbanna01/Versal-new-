@@ -7,7 +7,16 @@ function resolveBaseURL() {
   if (process.env.VERCEL_PROJECT_PRODUCTION_URL)
     return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`
-  return process.env.V0_RUNTIME_URL
+  if (process.env.V0_RUNTIME_URL) return process.env.V0_RUNTIME_URL
+  return process.env.NODE_ENV === 'production' ? undefined : 'http://localhost:3000'
+}
+
+function resolveDatabaseURL() {
+  return process.env.DATABASE_URL
+}
+
+function resolveAuthSecret() {
+  return process.env.BETTER_AUTH_SECRET ?? 'dev-local-secret-change-me'
 }
 
 function resolveTrustedOrigins() {
@@ -26,24 +35,48 @@ function resolveTrustedOrigins() {
   return Array.from(origins)
 }
 
-export const auth = betterAuth({
-  database: new Pool({ connectionString: process.env.DATABASE_URL }),
-  baseURL: resolveBaseURL(),
-  trustedOrigins: resolveTrustedOrigins(),
-  emailAndPassword: {
-    enabled: true,
+const authEnabled = process.env.ENABLE_AUTH === 'true'
+const databaseUrl = authEnabled ? resolveDatabaseURL() : undefined
+
+const disabledAuth = Object.assign(
+  async () => {
+    throw new Error(
+      'Authentication is disabled. Set ENABLE_AUTH=true and configure a valid DATABASE_URL to enable Better Auth.',
+    )
   },
-  ...(process.env.NODE_ENV === 'development'
-    ? {
-        advanced: {
-          // Required by the cross-site v0 preview iframe. Without these
-          // attributes, login succeeds but the next request appears signed out.
-          defaultCookieAttributes: {
-            sameSite: 'none' as const,
-            secure: true,
-          },
-        },
-      }
-    : {}),
-  plugins: [nextCookies()],
-})
+  {
+    api: {
+      getSession: async () => null,
+    },
+    handler: async () => {
+      throw new Error(
+        'Authentication is disabled. Set ENABLE_AUTH=true and configure a valid DATABASE_URL to enable Better Auth.',
+      )
+    },
+  },
+)
+
+export const auth = databaseUrl
+  ? betterAuth({
+      secret: resolveAuthSecret(),
+      database: new Pool({ connectionString: databaseUrl }),
+      baseURL: resolveBaseURL(),
+      trustedOrigins: resolveTrustedOrigins(),
+      emailAndPassword: {
+        enabled: true,
+      },
+      ...(process.env.NODE_ENV === 'development'
+        ? {
+            advanced: {
+              // Required by the cross-site v0 preview iframe. Without these
+              // attributes, login succeeds but the next request appears signed out.
+              defaultCookieAttributes: {
+                sameSite: 'none' as const,
+                secure: true,
+              },
+            },
+          }
+        : {}),
+      plugins: [nextCookies()],
+    })
+  : disabledAuth

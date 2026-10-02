@@ -226,7 +226,7 @@ export const packages = pgTable('package', {
 
 export const contactSetting = pgTable('contact_setting', {
   id: integer('id').primaryKey().default(1),
-  agencyName: text('agency_name').notNull().default('Nova Studio'),
+  agencyName: text('agency_name').notNull().default('OyeCreative'),
   logo: text('logo'),
   email: text('email'),
   phone: text('phone'),

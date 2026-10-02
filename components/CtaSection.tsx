@@ -63,7 +63,7 @@ export function CtaSection() {
             {/* CTAs */}
             <div className="flex flex-wrap items-center justify-center gap-3">
               <Link
-                href="/contact"
+                href="/book-now"
                 className="inline-flex items-center gap-2 rounded-xl btn-primary px-7 py-3.5 text-sm font-semibold text-white"
               >
                 Start Your Project

@@ -16,7 +16,7 @@ export type EmailMessage = {
 }
 
 function getFrom() {
-  return process.env.EMAIL_FROM || 'Nova Studio <onboarding@resend.dev>'
+  return process.env.EMAIL_FROM || 'OyeCreative <onboarding@resend.dev>'
 }
 
 async function sendViaResend(message: EmailMessage): Promise<boolean> {
@@ -65,11 +65,11 @@ function layout(inner: string) {
   return `<!doctype html><html><body style="margin:0;background:#0f0f12;font-family:Inter,Arial,sans-serif;color:#e9e9ec;padding:32px">
     <div style="max-width:560px;margin:0 auto;background:#17171b;border:1px solid #2a2a30;border-radius:16px;overflow:hidden">
       <div style="padding:24px 28px;border-bottom:1px solid #2a2a30">
-        <span style="font-size:18px;font-weight:700;color:#fff">Nova<span style="color:#ff7a1a">Studio</span></span>
+        <span style="font-size:18px;font-weight:700;color:#fff">Oye<span style="color:#4D9CFF">Creative</span></span>
       </div>
       <div style="padding:28px">${inner}</div>
       <div style="padding:18px 28px;border-top:1px solid #2a2a30;font-size:12px;color:#8a8a92">
-        Nova Studio — From Idea to Execution.
+        OyeCreative — From Idea to Execution.
       </div>
     </div>
   </body></html>`

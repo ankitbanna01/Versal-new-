@@ -6,7 +6,7 @@ import { ServicesCta } from '@/components/services/ServicesCta'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Services — Nova Studio',
+  title: 'Services — OyeCreative',
   description:
     'Website design, software development, graphic design, digital marketing, branding, logo design, photography, Google Ads and Meta Ads — all under one roof.',
 }

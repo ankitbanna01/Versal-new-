@@ -13,12 +13,14 @@ import { and, asc, desc, eq } from 'drizzle-orm'
 
 /* ------------------------------- Settings ------------------------------- */
 export async function getSettings() {
+  if (!db) return null
   const rows = await db.select().from(contactSetting).where(eq(contactSetting.id, 1)).limit(1)
   return rows[0] ?? null
 }
 
 /* ------------------------------- Services ------------------------------- */
 export async function getServices() {
+  if (!db) return []
   return db
     .select()
     .from(service)
@@ -27,6 +29,7 @@ export async function getServices() {
 }
 
 export async function getFeaturedServices(limit = 8) {
+  if (!db) return []
   return db
     .select()
     .from(service)
@@ -36,12 +39,14 @@ export async function getFeaturedServices(limit = 8) {
 }
 
 export async function getServiceBySlug(slug: string) {
+  if (!db) return null
   const rows = await db.select().from(service).where(eq(service.slug, slug)).limit(1)
   return rows[0] ?? null
 }
 
 /* ------------------------------ Portfolio ------------------------------- */
 export async function getProjects() {
+  if (!db) return []
   return db
     .select()
     .from(portfolioProject)
@@ -50,6 +55,7 @@ export async function getProjects() {
 }
 
 export async function getFeaturedProjects(limit = 6) {
+  if (!db) return []
   return db
     .select()
     .from(portfolioProject)
@@ -59,6 +65,7 @@ export async function getFeaturedProjects(limit = 6) {
 }
 
 export async function getProjectBySlug(slug: string) {
+  if (!db) return null
   const rows = await db
     .select()
     .from(portfolioProject)
@@ -69,6 +76,7 @@ export async function getProjectBySlug(slug: string) {
 
 /* ----------------------------- Case Studies ----------------------------- */
 export async function getCaseStudies() {
+  if (!db) return []
   return db
     .select()
     .from(caseStudy)
@@ -77,12 +85,14 @@ export async function getCaseStudies() {
 }
 
 export async function getCaseStudyBySlug(slug: string) {
+  if (!db) return null
   const rows = await db.select().from(caseStudy).where(eq(caseStudy.slug, slug)).limit(1)
   return rows[0] ?? null
 }
 
 /* ----------------------------- Testimonials ----------------------------- */
 export async function getTestimonials(onlyFeatured = false) {
+  if (!db) return []
   const where = onlyFeatured
     ? and(eq(testimonial.published, true), eq(testimonial.featured, true))
     : eq(testimonial.published, true)
@@ -91,6 +101,7 @@ export async function getTestimonials(onlyFeatured = false) {
 
 /* -------------------------------- Blog ---------------------------------- */
 export async function getPublishedPosts() {
+  if (!db) return []
   return db
     .select()
     .from(blogPost)
@@ -99,11 +110,13 @@ export async function getPublishedPosts() {
 }
 
 export async function getPostBySlug(slug: string) {
+  if (!db) return null
   const rows = await db.select().from(blogPost).where(eq(blogPost.slug, slug)).limit(1)
   return rows[0] ?? null
 }
 
 /* ------------------------------ Packages -------------------------------- */
 export async function getPackages() {
+  if (!db) return []
   return db.select().from(packages).orderBy(asc(packages.sortOrder))
 }

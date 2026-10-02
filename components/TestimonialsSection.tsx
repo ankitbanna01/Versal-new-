@@ -6,7 +6,7 @@ import { Star, Quote } from 'lucide-react'
 const testimonials = [
   {
     content:
-      'Nova Studio completely transformed our brand. The new identity resonates perfectly with our audience and we have seen a measurable increase in customer engagement since launch.',
+      'OyeCreative completely transformed our brand. The new identity resonates perfectly with our audience and we have seen a measurable increase in customer engagement since launch.',
     author: 'Sarah Al-Rashid',
     company: 'Bloom Restaurant Group',
     role: 'Founder & CEO',
@@ -22,7 +22,7 @@ const testimonials = [
   },
   {
     content:
-      'Working with Nova Studio felt seamless from day one. They understood our vision immediately, delivered ahead of schedule, and the quality of the creative work is outstanding.',
+      'Working with OyeCreative felt seamless from day one. They understood our vision immediately, delivered ahead of schedule, and the quality of the creative work is outstanding.',
     author: 'Priya Mehta',
     company: 'Zenith Wellness',
     role: 'Marketing Director',

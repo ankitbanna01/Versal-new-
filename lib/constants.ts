@@ -133,10 +133,9 @@ export const INDUSTRIES = [
 ]
 
 export const NAV_LINKS = [
+  { label: 'Home', href: '/' },
   { label: 'Services', href: '/services' },
   { label: 'Portfolio', href: '/portfolio' },
-  { label: 'Case Studies', href: '/case-studies' },
-  { label: 'Industries', href: '/industries' },
   { label: 'Process', href: '/process' },
   { label: 'Pricing', href: '/pricing' },
   { label: 'Blog', href: '/blog' },

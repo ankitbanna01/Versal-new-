@@ -1,29 +1,36 @@
 import { Navbar } from '@/components/Navbar'
-import { Hero } from '@/components/Hero'
-import { ServicesSection } from '@/components/ServicesSection'
-import { WorkSection } from '@/components/WorkSection'
-import { ProcessSection } from '@/components/ProcessSection'
-import { CaseStudiesSection } from '@/components/CaseStudiesSection'
-import { TestimonialsSection } from '@/components/TestimonialsSection'
-import { AboutSection } from '@/components/AboutSection'
-import { BlogSection } from '@/components/BlogSection'
-import { CtaSection } from '@/components/CtaSection'
 import { Footer } from '@/components/Footer'
+import { HomeHero } from '@/components/home/HomeHero'
+import { HomeServicesPreview } from '@/components/home/HomeServicesPreview'
+import { HomePortfolio } from '@/components/home/HomePortfolio'
+import { HomeProcess } from '@/components/home/HomeProcess'
+import { HomeWhyUs } from '@/components/home/HomeWhyUs'
+import { HomePricing } from '@/components/home/HomePricing'
+import { HomeBlog } from '@/components/home/HomeBlog'
+import { HomeFinalCta } from '@/components/home/HomeFinalCta'
+import { TestimonialsSection } from '@/components/TestimonialsSection'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'OyeCreative — We Turn Ideas Into Digital Experiences',
+  description:
+    'Creative design, technology and digital solutions built to help ambitious businesses move forward. Website design, branding, digital marketing, Google Ads & more.',
+}
 
 export default function HomePage() {
   return (
     <>
       <Navbar />
       <main>
-        <Hero />
-        <ServicesSection />
-        <WorkSection />
-        <ProcessSection />
-        <CaseStudiesSection />
+        <HomeHero />
+        <HomeServicesPreview />
+        <HomePortfolio />
+        <HomeProcess />
+        <HomeWhyUs />
         <TestimonialsSection />
-        <AboutSection />
-        <BlogSection />
-        <CtaSection />
+        <HomePricing />
+        <HomeBlog />
+        <HomeFinalCta />
       </main>
       <Footer />
     </>

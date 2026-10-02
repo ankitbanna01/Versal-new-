@@ -46,7 +46,7 @@ export function AboutSection() {
           >
             <Image
               src="/images/about-studio.png"
-              alt="Nova Studio team at work"
+              alt="OyeCreative team at work"
               width={640}
               height={480}
               className="w-full h-auto object-cover"
@@ -72,7 +72,7 @@ export function AboutSection() {
               <span className="gradient-text">every discipline</span>
             </h2>
             <p className="text-[#64748B] leading-relaxed">
-              Nova Studio is a full-service creative and digital agency. We partner with founders,
+              OyeCreative is a full-service creative and digital agency. We partner with founders,
               marketers, and enterprise teams to build brands that are memorable, digital experiences
               that convert, and marketing systems that scale.
             </p>
@@ -94,7 +94,7 @@ export function AboutSection() {
         {/* Why choose us */}
         <div>
           <h3 className="text-xl font-extrabold text-[#102A56] mb-8">
-            Why teams choose Nova Studio
+            Why teams choose OyeCreative
           </h3>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {WHY_CHOOSE_US.map((item, i) => {

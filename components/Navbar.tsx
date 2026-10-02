@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X, Zap } from 'lucide-react'
+import { ArrowRight, Menu, X } from 'lucide-react'
 import { NAV_LINKS } from '@/lib/constants'
 import { cn } from '@/lib/utils'
+import { OyeLogo } from '@/components/OyeLogo'
 
-export function Navbar() {
+export function Navbar({ activeHref }: { activeHref?: string }) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
@@ -28,13 +29,20 @@ export function Navbar() {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
 
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 shrink-0">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0066FF] shadow-[0_2px_8px_0_#0066FF40]">
-              <Zap size={16} className="text-white fill-white" />
-            </div>
-            <span className="text-lg font-bold tracking-tight text-[#102A56]">
-              Nova<span className="text-[#0066FF]">Studio</span>
+          {/* ── Logo — links to homepage, exact uploaded asset ── */}
+          <Link
+            href="/"
+            className="shrink-0 flex items-center h-[64px] pr-4 overflow-hidden transition-opacity duration-200 hover:opacity-85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0066FF] rounded-md"
+            aria-label="OyeCreatives — go to homepage"
+          >
+            <OyeLogo className="h-[42px] sm:h-[46px] lg:h-[52px] w-auto max-w-[280px] object-contain" size={52} />
+            <span className="ml-2 flex min-w-0 flex-col justify-center leading-none">
+              <span className="whitespace-nowrap text-[19px] font-extrabold text-[#102A56] sm:text-[20px]">
+                Oye<span className="text-[#0066FF]">Creatives</span>
+              </span>
+              <span className="mt-1 whitespace-nowrap text-[9px] font-medium text-[#64748B] sm:text-[10px]">
+                Creativity Without Limits
+              </span>
             </span>
           </Link>
 
@@ -44,10 +52,17 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="relative px-3 py-2 text-sm font-medium text-[#64748B] hover:text-[#0066FF] transition-colors duration-200 rounded-md hover:bg-[#EAF4FF] group"
+                aria-current={link.href === activeHref ? 'page' : undefined}
+                className={cn(
+                  'relative px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-md hover:bg-[#EAF4FF] group',
+                  link.href === activeHref ? 'text-[#0066FF]' : 'text-[#64748B] hover:text-[#0066FF]',
+                )}
               >
                 {link.label}
-                <span className="absolute bottom-1 left-3 right-3 h-px bg-[#0066FF] scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left" />
+                <span className={cn(
+                  'absolute bottom-1 left-3 right-3 h-px bg-[#0066FF] transition-transform duration-200 origin-left',
+                  link.href === activeHref ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100',
+                )} />
               </Link>
             ))}
           </nav>
@@ -55,17 +70,15 @@ export function Navbar() {
           {/* CTA */}
           <div className="hidden lg:flex items-center gap-3">
             <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 rounded-lg btn-primary px-4 py-2 text-sm font-semibold text-white"
+              href="/book-now"
+              className="group inline-flex items-center gap-2 rounded-lg btn-primary px-4 py-2 text-sm font-semibold text-white transition-transform duration-200 hover:scale-[1.03] hover:shadow-[0_8px_28px_0_#0066FF55]"
             >
-              Start a Project
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              Book Now
+              <ArrowRight size={14} className="transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
           </div>
 
-          {/* Mobile toggle */}
+          {/* Mobile hamburger — right side, never overlaps logo */}
           <button
             className="lg:hidden p-2 text-[#64748B] hover:text-[#0066FF] hover:bg-[#EAF4FF] rounded-lg transition-colors"
             onClick={() => setOpen(!open)}
@@ -85,17 +98,22 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className="px-3 py-2.5 text-sm font-medium text-[#64748B] hover:text-[#0066FF] hover:bg-[#EAF4FF] transition-colors rounded-md"
+                aria-current={link.href === activeHref ? 'page' : undefined}
+                className={cn(
+                  'px-3 py-2.5 text-sm font-medium hover:text-[#0066FF] hover:bg-[#EAF4FF] transition-colors rounded-md',
+                  link.href === activeHref ? 'text-[#0066FF] bg-[#EAF4FF]' : 'text-[#64748B]',
+                )}
               >
                 {link.label}
               </Link>
             ))}
             <Link
-              href="/contact"
+              href="/book-now"
               onClick={() => setOpen(false)}
-              className="mt-3 inline-flex items-center justify-center rounded-lg btn-primary px-4 py-2.5 text-sm font-semibold text-white"
+              className="group mt-3 inline-flex items-center justify-center gap-2 rounded-lg btn-primary px-4 py-2.5 text-sm font-semibold text-white"
             >
-              Start a Project
+              Book Now
+              <ArrowRight size={14} className="transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
           </nav>
         </div>

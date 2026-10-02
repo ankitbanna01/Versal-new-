@@ -513,7 +513,7 @@ export function ServicesHero() {
               className="flex flex-wrap items-center gap-3"
             >
               <Link
-                href="/contact"
+                href="/book-now"
                 className="inline-flex items-center gap-2 rounded-xl btn-primary px-6 py-3.5 text-sm font-semibold text-white"
               >
                 Start Your Project
