@@ -106,12 +106,12 @@ export function Footer({ socialIcons = false }: { socialIcons?: boolean }) {
               Contact
             </h3>
             <p className="text-sm text-[#94A3B8]">hello@oyecreative.us</p>
-            <p className="text-sm text-[#94A3B8]">+1 (555) 000-0000</p>
+            <p className="text-sm text-[#94A3B8]">+91 8959097675</p>
             <Link
               href="/book-now"
               className="mt-3 inline-flex items-center justify-center rounded-lg btn-primary px-4 py-2 text-xs font-semibold text-white self-start"
             >
-              Start a Project
+              Book Now
             </Link>
           </div>
         </div>
